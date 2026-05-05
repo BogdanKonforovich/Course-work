@@ -56,6 +56,8 @@ namespace Курсова_робота
                         myGraph.FillRandom();
 
                         UpdateGridFromGraph();
+
+                        btnClearMatrix_Click.Visible = true;
                     }
 
                     gridMatrix.ClearSelection();
@@ -250,8 +252,12 @@ namespace Курсова_робота
             if (valStr == "-")
             {
                 ClearResults();
-                if (pbGraph != null) pbGraph.Invalidate();
-                return;
+                if (pbGraph != null)
+                {
+                    pbGraph.Invalidate();
+                    btnClearMatrix_Click.Visible = true;
+                    return;
+                }
             }
 
             if (int.TryParse(valStr, out int weight))
@@ -268,6 +274,7 @@ namespace Курсова_робота
                     {
                         pbGraph.Invalidate();
                     }
+                    btnClearMatrix_Click.Visible = true;
                 }
             }
             else
@@ -838,6 +845,32 @@ namespace Курсова_робота
         private void cmbAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int n = gridMatrix.RowCount;
+            if (n != 0)
+            {
+
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        if (i == j)
+                        {
+                            gridMatrix.Rows[i].Cells[j].Value = "0";
+                        }
+                        else
+                        {
+                            gridMatrix.Rows[i].Cells[j].Value = "-";
+                            gridMatrix.Rows[i].Cells[j].Style.ForeColor = Color.Black;
+                        }
+                    }
+                }
+
+                ClearResults();
+            }
         }
     }
 }

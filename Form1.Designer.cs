@@ -59,6 +59,7 @@
             label7 = new Label();
             label6 = new Label();
             btnSaveReport = new Button();
+            btnClearMatrix_Click = new Button();
             ((System.ComponentModel.ISupportInitialize)gridMatrix).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridResult).BeginInit();
             pnlResults.SuspendLayout();
@@ -208,7 +209,7 @@
             // 
             // btnEditMode
             // 
-            btnEditMode.Location = new Point(294, 131);
+            btnEditMode.Location = new Point(300, 32);
             btnEditMode.Name = "btnEditMode";
             btnEditMode.Size = new Size(214, 29);
             btnEditMode.TabIndex = 13;
@@ -386,11 +387,23 @@
             btnSaveReport.UseVisualStyleBackColor = true;
             btnSaveReport.Click += btnSaveReport_Click;
             // 
+            // btnClearMatrix_Click
+            // 
+            btnClearMatrix_Click.Location = new Point(348, 131);
+            btnClearMatrix_Click.Name = "btnClearMatrix_Click";
+            btnClearMatrix_Click.Size = new Size(166, 29);
+            btnClearMatrix_Click.TabIndex = 21;
+            btnClearMatrix_Click.Text = "Очистити матрицю";
+            btnClearMatrix_Click.UseVisualStyleBackColor = true;
+            btnClearMatrix_Click.Visible = false;
+            btnClearMatrix_Click.Click += button1_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1524, 1055);
+            Controls.Add(btnClearMatrix_Click);
             Controls.Add(pnlPathSearch);
             Controls.Add(pbGraph);
             Controls.Add(pnlEdit);
@@ -456,5 +469,6 @@
         private Button btnSaveReport;
         private Label label6;
         private Label label7;
+        private Button btnClearMatrix_Click;
     }
 }
