@@ -255,7 +255,6 @@ namespace Курсова_робота
                 if (pbGraph != null)
                 {
                     pbGraph.Invalidate();
-                    btnClearMatrix_Click.Visible = true;
                     return;
                 }
             }
@@ -605,6 +604,8 @@ namespace Курсова_робота
 
         private void btnEditMode_Click(object sender, EventArgs e)
         {
+            int n = gridMatrix.RowCount;
+
             pnlResults.Visible = false;
             pnlEdit.Visible = true;
 
@@ -614,6 +615,10 @@ namespace Курсова_робота
 
         private void btnFinishEditing_Click(object sender, EventArgs e)
         {
+            if (HasAnyEdges())
+            {
+                btnClearMatrix_Click.Visible = true;
+            }
             pnlEdit.Visible = false;
             pnlResults.Visible = true;
 
@@ -869,8 +874,32 @@ namespace Курсова_робота
                     }
                 }
 
+                btnClearMatrix_Click.Visible = false;
                 ClearResults();
             }
+        }
+
+        private bool HasAnyEdges()
+        {
+            int n = gridMatrix.RowCount;
+
+            if (n == 0) return false;
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (i != j) 
+                    {
+                        string valStr = gridMatrix.Rows[i].Cells[j].Value?.ToString()?.Trim();
+                        if (!string.IsNullOrEmpty(valStr) && valStr != "-")
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
     }
 }

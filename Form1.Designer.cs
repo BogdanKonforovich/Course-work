@@ -74,7 +74,7 @@
             // 
             // txtVertices
             // 
-            txtVertices.Location = new Point(91, 32);
+            txtVertices.Location = new Point(91, 40);
             txtVertices.Name = "txtVertices";
             txtVertices.Size = new Size(125, 27);
             txtVertices.TabIndex = 0;
@@ -83,7 +83,7 @@
             // 
             // btnCreateMatrix
             // 
-            btnCreateMatrix.Location = new Point(91, 131);
+            btnCreateMatrix.Location = new Point(89, 145);
             btnCreateMatrix.Name = "btnCreateMatrix";
             btnCreateMatrix.Size = new Size(168, 29);
             btnCreateMatrix.TabIndex = 1;
@@ -95,7 +95,7 @@
             // 
             gridMatrix.BackgroundColor = SystemColors.Control;
             gridMatrix.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            gridMatrix.Location = new Point(91, 166);
+            gridMatrix.Location = new Point(89, 183);
             gridMatrix.Name = "gridMatrix";
             gridMatrix.RowHeadersWidth = 51;
             gridMatrix.Size = new Size(473, 292);
@@ -107,7 +107,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(91, 9);
+            label1.Location = new Point(89, 9);
             label1.Name = "label1";
             label1.Size = new Size(317, 20);
             label1.TabIndex = 3;
@@ -126,7 +126,7 @@
             cmbInputMethod.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbInputMethod.FormattingEnabled = true;
             cmbInputMethod.Items.AddRange(new object[] { "Вручну", "Рандомно" });
-            cmbInputMethod.Location = new Point(91, 94);
+            cmbInputMethod.Location = new Point(91, 111);
             cmbInputMethod.Name = "cmbInputMethod";
             cmbInputMethod.Size = new Size(151, 28);
             cmbInputMethod.TabIndex = 5;
@@ -135,7 +135,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(91, 71);
+            label3.Location = new Point(89, 79);
             label3.Name = "label3";
             label3.Size = new Size(257, 20);
             label3.TabIndex = 6;
@@ -209,7 +209,7 @@
             // 
             // btnEditMode
             // 
-            btnEditMode.Location = new Point(300, 32);
+            btnEditMode.Location = new Point(350, 40);
             btnEditMode.Name = "btnEditMode";
             btnEditMode.Size = new Size(214, 29);
             btnEditMode.TabIndex = 13;
@@ -389,7 +389,7 @@
             // 
             // btnClearMatrix_Click
             // 
-            btnClearMatrix_Click.Location = new Point(348, 131);
+            btnClearMatrix_Click.Location = new Point(398, 145);
             btnClearMatrix_Click.Name = "btnClearMatrix_Click";
             btnClearMatrix_Click.Size = new Size(166, 29);
             btnClearMatrix_Click.TabIndex = 21;
