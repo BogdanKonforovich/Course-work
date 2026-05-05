@@ -17,7 +17,6 @@ namespace Coursework_2
             int[,] dist = (int[,])matrix.Clone();
             int[,] next = (int[,])dist.Clone();
 
-            // Ініціалізація матриці шляхів
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
@@ -31,19 +30,14 @@ namespace Coursework_2
 
             bool stop = false;
 
-            // Класичний потрійний цикл Флойда-Воршелла
             for (int m = 0; m < n && !stop; m++)
             {
                 for (int i = 0; i < n; i++)
                 {
                     for (int j = 0; j < n; j++)
                     {
-                        // Лічильник стоїть тут. Він спрацює рівно n^3 разів.
                         operations++;
 
-                        // Перевірка на INF потрібна ЛИШЕ для того, щоб при 
-                        // додаванні не відбулося переповнення типу (Integer Overflow),
-                        // але вона не пропускає сам цикл по j, як у вашій оптимізації.
                         if (dist[i, m] != Const.INF && dist[m, j] != Const.INF)
                         {
                             if (dist[i, m] + dist[m, j] < dist[i, j])
@@ -55,7 +49,6 @@ namespace Coursework_2
                     }
                 }
 
-                // Перевірка на від'ємний цикл
                 for (int i = 0; i < n && !stop; i++)
                 {
                     if (dist[i, i] < 0)
