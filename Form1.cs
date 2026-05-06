@@ -629,6 +629,81 @@ namespace Курсова_робота
             btnEditMode.Visible = true;
         }
 
+        private void btnFindPath_Click(object sender, EventArgs e)
+        {
+            int n = gridMatrix.RowCount;
+            if (n > 0 && nextMatrix != null)
+            {
+                int start = (int)numStartNode.Value - 1;
+                int end = (int)numEndNode.Value - 1;
+
+                if (start >= 0 && end >= 0 && start < n && end < n)
+                {
+                    if (nextMatrix.GetLength(0) != n)
+                    {
+                        MessageBox.Show("Поточний алгоритм не підтримує відновлення шляху.", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+
+                    highlightedEdges = new bool[n, n];
+
+                    string dVal = gridResult.Rows[start].Cells[end].Value?.ToString();
+
+                    if (dVal == "-" || string.IsNullOrEmpty(dVal))
+                    {
+                        lblPathMessage.Text = $"Шляху між {start + 1} та {end + 1} не існує.";
+                    }
+                    else if (start == end)
+                    {
+                        lblPathMessage.Text = "Ви вже у цій вершині. Відстань: 0.";
+                    }
+                    else
+                    {
+                        int curr = start;
+                        string pathStr = (start + 1).ToString();
+                        int safetyLimit = 0;
+
+                        while (curr != end && safetyLimit < n)
+                        {
+                            int next = nextMatrix[curr, end];
+
+                            if (next != -1)
+                            {
+                                highlightedEdges[curr, next] = true;
+                                curr = next;
+                                pathStr += " -> " + (curr + 1).ToString();
+                            }
+                            else
+                            {
+                                safetyLimit = n;
+                            }
+                            safetyLimit++;
+                        }
+
+                        lblPathMessage.Text = $"Знайдений шлях: {pathStr} (Довжина: {dVal})";
+                    }
+
+                    pbGraph.Invalidate();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Спочатку створіть матрицю найкоротших шляхів!", "Увага");
+            }
+        }
+
+        private void btnSaveReport_Click(object sender, EventArgs e)
+        {
+            if (myGraph != null && lastResult != null)
+            {
+                FileService.SaveResultsToFile(myGraph, lastResult);
+            }
+            else
+            {
+                MessageBox.Show("Спочатку розрахуйте матрицю найкоротших шляхів!", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
         private void pbGraph_Paint(object sender, PaintEventArgs e)
         {
             int n = gridMatrix.RowCount;
@@ -734,69 +809,6 @@ namespace Курсова_робота
             }
         }
 
-        private void btnFindPath_Click(object sender, EventArgs e)
-        {
-            int n = gridMatrix.RowCount;
-            if (n > 0 && nextMatrix != null)
-            {
-                int start = (int)numStartNode.Value - 1;
-                int end = (int)numEndNode.Value - 1;
-
-                if (start >= 0 && end >= 0 && start < n && end < n)
-                {
-                    if (nextMatrix.GetLength(0) != n)
-                    {
-                        MessageBox.Show("Поточний алгоритм не підтримує відновлення шляху.", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
-                    }
-
-                    highlightedEdges = new bool[n, n];
-
-                    string dVal = gridResult.Rows[start].Cells[end].Value?.ToString();
-
-                    if (dVal == "-" || string.IsNullOrEmpty(dVal))
-                    {
-                        lblPathMessage.Text = $"Шляху між {start + 1} та {end + 1} не існує.";
-                    }
-                    else if (start == end)
-                    {
-                        lblPathMessage.Text = "Ви вже у цій вершині. Відстань: 0.";
-                    }
-                    else
-                    {
-                        int curr = start;
-                        string pathStr = (start + 1).ToString();
-                        int safetyLimit = 0;
-
-                        while (curr != end && safetyLimit < n)
-                        {
-                            int next = nextMatrix[curr, end];
-
-                            if (next != -1)
-                            {
-                                highlightedEdges[curr, next] = true;
-                                curr = next;
-                                pathStr += " -> " + (curr + 1).ToString();
-                            }
-                            else
-                            {
-                                safetyLimit = n;
-                            }
-                            safetyLimit++;
-                        }
-
-                        lblPathMessage.Text = $"Знайдений шлях: {pathStr} (Довжина: {dVal})";
-                    }
-
-                    pbGraph.Invalidate();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Спочатку створіть матрицю найкоротших шляхів!", "Увага");
-            }
-        }
-
         private void ClearResults()
         {
             nextMatrix = null;
@@ -811,45 +823,6 @@ namespace Курсова_робота
             {
                 pbGraph.Invalidate();
             }
-        }
-
-        private void btnSaveReport_Click(object sender, EventArgs e)
-        {
-            if (myGraph != null && lastResult != null)
-            {
-                FileService.SaveResultsToFile(myGraph, lastResult);
-            }
-            else
-            {
-                MessageBox.Show("Спочатку розрахуйте матрицю найкоротших шляхів!", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void label6_Click(object sender, EventArgs e) { }
-        private void pnlEdit_Paint(object sender, PaintEventArgs e) { }
-        private void pictureBox1_Click(object sender, EventArgs e) { }
-        private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e) { }
-        private void txtVertices_TextChanged(object sender, EventArgs e) { }
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) { }
-        private void Form1_Load(object sender, EventArgs e) { }
-        private void label3_Click(object sender, EventArgs e) { }
-        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e) { }
-        private void label4_Click(object sender, EventArgs e) { }
-
-        private void label6_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cmbAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -901,5 +874,23 @@ namespace Курсова_робота
             }
             return false;
         }
+
+        private void label6_Click(object sender, EventArgs e) { }
+        private void pnlEdit_Paint(object sender, PaintEventArgs e) { }
+        private void pictureBox1_Click(object sender, EventArgs e) { }
+        private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e) { }
+        private void txtVertices_TextChanged(object sender, EventArgs e) { }
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) { }
+        private void Form1_Load(object sender, EventArgs e) { }
+        private void label3_Click(object sender, EventArgs e) { }
+        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e) { }
+        private void label4_Click(object sender, EventArgs e) { }
+
+        private void label6_Click_1(object sender, EventArgs e) { }
+
+        private void label7_Click(object sender, EventArgs e) { }
+
+        private void cmbAlgorithm_SelectedIndexChanged(object sender, EventArgs e) { }
     }
 }

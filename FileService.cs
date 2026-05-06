@@ -1,6 +1,6 @@
 ﻿using System;
-using System.IO; // ОБОВ'ЯЗКОВО для роботи з файлами
-using System.Windows.Forms; // ОБОВ'ЯЗКОВО для MessageBox
+using System.IO;
+using System.Windows.Forms;
 
 namespace Coursework_2
 {
@@ -18,7 +18,6 @@ namespace Coursework_2
 
             try
             {
-                // Створюємо або перезаписуємо файл
                 using (StreamWriter writer = new StreamWriter(Const.FILENAME))
                 {
                     writer.WriteLine("                ЗВІТ ПРО РОБОТУ ПРОГРАМИ");
@@ -69,7 +68,7 @@ namespace Coursework_2
                 writer.Write($"{(i + 1),3} ");
                 for (int j = 0; j < n; j++)
                 {
-                    if (matrix[i, j] >= Const.INF) // Використовуємо >= INF для надійності
+                    if (matrix[i, j] >= Const.INF)
                         writer.Write($"{"-",5}");
                     else
                         writer.Write($"{matrix[i, j],5}");
