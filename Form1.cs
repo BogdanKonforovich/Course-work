@@ -386,7 +386,7 @@ namespace Курсова_робота
                                     pnlPathSearch.Visible = true;
                                     lblPathMessage.Text = "Оберіть вершини та натисніть 'Знайти шлях'";
 
-                                    MessageBox.Show($"Матрицю найкоротших шляхів побудовано!\nОперацій: {result.Operations}", "Успіх");
+                                    MessageBox.Show($"Матрицю найкоротших шляхів побудовано!\nКількість ітерацій: {result.Operations}", "Успіх");
                                 }
                             }
                             catch (Exception ex)

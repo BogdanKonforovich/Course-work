@@ -163,7 +163,7 @@ namespace Coursework_2
                 {
                     if (i != j)
                     {
-                        if(rnd.Next(0, 10) < 7)
+                        if(rnd.Next(0, 10) < 6)
                         {
                             int weight = rnd.Next(0, Const.MAX_WEIGHT + 1);
                             this.AddEdge(weight, i, j);
