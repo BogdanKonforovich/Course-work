@@ -6,7 +6,7 @@ namespace Coursework_2
 {
     internal class FileService
     {
-        public static void SaveResultsToFile(Graph graph, ShortestPathResult result)
+        public static void SaveResultsToFile(Graph graph, ShortestPathResult result, string algName)
         {
             if (graph == null)
             {
@@ -41,8 +41,8 @@ namespace Coursework_2
                     {
                         WriteMatrix(writer, result.Dist, n);
                         writer.WriteLine();
-
-                        writer.WriteLine("3. ПРАКТИЧНА СКЛАДНІСТЬ:");
+                        writer.WriteLine("3. ВИКОРИСТАНИЙ АЛГОРИТМ ТА ЙОГО СКЛАДНІСТЬ:");
+                        writer.WriteLine($"Використаний алгоритм: {algName}");
                         writer.WriteLine($"Кількість операцій алгоритму: {result.Operations}");
                     }
                 }

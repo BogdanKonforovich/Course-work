@@ -43,19 +43,19 @@
             pnlResults = new Panel();
             btnEditMode = new Button();
             pnlEdit = new Panel();
+            txtAddVertex = new TextBox();
+            txtRemoveVertex = new TextBox();
             btnFinishEditing = new Button();
             btnRemoveVertex = new Button();
-            numRemoveVertex = new NumericUpDown();
             label5 = new Label();
             btnAddVertex = new Button();
-            numAddVertex = new NumericUpDown();
             label4 = new Label();
             pbGraph = new PictureBox();
-            numStartNode = new NumericUpDown();
-            numEndNode = new NumericUpDown();
             btnFindPath = new Button();
             lblPathMessage = new Label();
             pnlPathSearch = new Panel();
+            txtEndNode = new TextBox();
+            txtStartNode = new TextBox();
             label7 = new Label();
             label6 = new Label();
             btnSaveReport = new Button();
@@ -64,11 +64,7 @@
             ((System.ComponentModel.ISupportInitialize)gridResult).BeginInit();
             pnlResults.SuspendLayout();
             pnlEdit.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numRemoveVertex).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numAddVertex).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbGraph).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numStartNode).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numEndNode).BeginInit();
             pnlPathSearch.SuspendLayout();
             SuspendLayout();
             // 
@@ -219,12 +215,12 @@
             // 
             // pnlEdit
             // 
+            pnlEdit.Controls.Add(txtAddVertex);
+            pnlEdit.Controls.Add(txtRemoveVertex);
             pnlEdit.Controls.Add(btnFinishEditing);
             pnlEdit.Controls.Add(btnRemoveVertex);
-            pnlEdit.Controls.Add(numRemoveVertex);
             pnlEdit.Controls.Add(label5);
             pnlEdit.Controls.Add(btnAddVertex);
-            pnlEdit.Controls.Add(numAddVertex);
             pnlEdit.Controls.Add(label4);
             pnlEdit.Location = new Point(33, 824);
             pnlEdit.Name = "pnlEdit";
@@ -232,6 +228,22 @@
             pnlEdit.TabIndex = 14;
             pnlEdit.Visible = false;
             pnlEdit.Paint += pnlEdit_Paint;
+            // 
+            // txtAddVertex
+            // 
+            txtAddVertex.Location = new Point(17, 56);
+            txtAddVertex.Name = "txtAddVertex";
+            txtAddVertex.Size = new Size(125, 27);
+            txtAddVertex.TabIndex = 9;
+            txtAddVertex.TextChanged += txtAddVertex_TextChanged;
+            // 
+            // txtRemoveVertex
+            // 
+            txtRemoveVertex.Location = new Point(223, 56);
+            txtRemoveVertex.Name = "txtRemoveVertex";
+            txtRemoveVertex.Size = new Size(125, 27);
+            txtRemoveVertex.TabIndex = 8;
+            txtRemoveVertex.TextChanged += txtRemoveVertex_TextChanged;
             // 
             // btnFinishEditing
             // 
@@ -254,13 +266,6 @@
             btnRemoveVertex.UseVisualStyleBackColor = true;
             btnRemoveVertex.Click += btnRemoveVertex_Click;
             // 
-            // numRemoveVertex
-            // 
-            numRemoveVertex.Location = new Point(223, 62);
-            numRemoveVertex.Name = "numRemoveVertex";
-            numRemoveVertex.Size = new Size(150, 27);
-            numRemoveVertex.TabIndex = 5;
-            // 
             // label5
             // 
             label5.AutoSize = true;
@@ -279,13 +284,6 @@
             btnAddVertex.Text = "Додати";
             btnAddVertex.UseVisualStyleBackColor = true;
             btnAddVertex.Click += btnAddVertex_Click;
-            // 
-            // numAddVertex
-            // 
-            numAddVertex.Location = new Point(17, 62);
-            numAddVertex.Name = "numAddVertex";
-            numAddVertex.Size = new Size(150, 27);
-            numAddVertex.TabIndex = 1;
             // 
             // label4
             // 
@@ -307,20 +305,6 @@
             pbGraph.TabStop = false;
             pbGraph.Click += pictureBox1_Click;
             pbGraph.Paint += pbGraph_Paint;
-            // 
-            // numStartNode
-            // 
-            numStartNode.Location = new Point(17, 81);
-            numStartNode.Name = "numStartNode";
-            numStartNode.Size = new Size(150, 27);
-            numStartNode.TabIndex = 16;
-            // 
-            // numEndNode
-            // 
-            numEndNode.Location = new Point(239, 81);
-            numEndNode.Name = "numEndNode";
-            numEndNode.Size = new Size(150, 27);
-            numEndNode.TabIndex = 17;
             // 
             // btnFindPath
             // 
@@ -344,18 +328,35 @@
             // 
             // pnlPathSearch
             // 
+            pnlPathSearch.Controls.Add(txtEndNode);
+            pnlPathSearch.Controls.Add(txtStartNode);
             pnlPathSearch.Controls.Add(label7);
             pnlPathSearch.Controls.Add(label6);
             pnlPathSearch.Controls.Add(btnSaveReport);
             pnlPathSearch.Controls.Add(btnFindPath);
             pnlPathSearch.Controls.Add(lblPathMessage);
-            pnlPathSearch.Controls.Add(numStartNode);
-            pnlPathSearch.Controls.Add(numEndNode);
             pnlPathSearch.Location = new Point(663, 709);
             pnlPathSearch.Name = "pnlPathSearch";
             pnlPathSearch.Size = new Size(849, 258);
             pnlPathSearch.TabIndex = 20;
             pnlPathSearch.Visible = false;
+            pnlPathSearch.Paint += pnlPathSearch_Paint;
+            // 
+            // txtEndNode
+            // 
+            txtEndNode.Location = new Point(239, 81);
+            txtEndNode.Name = "txtEndNode";
+            txtEndNode.Size = new Size(125, 27);
+            txtEndNode.TabIndex = 25;
+            txtEndNode.TextChanged += txtNode_TextChanged;
+            // 
+            // txtStartNode
+            // 
+            txtStartNode.Location = new Point(17, 81);
+            txtStartNode.Name = "txtStartNode";
+            txtStartNode.Size = new Size(125, 27);
+            txtStartNode.TabIndex = 24;
+            txtStartNode.TextChanged += txtNode_TextChanged;
             // 
             // label7
             // 
@@ -425,11 +426,7 @@
             pnlResults.PerformLayout();
             pnlEdit.ResumeLayout(false);
             pnlEdit.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numRemoveVertex).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numAddVertex).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbGraph).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numStartNode).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numEndNode).EndInit();
             pnlPathSearch.ResumeLayout(false);
             pnlPathSearch.PerformLayout();
             ResumeLayout(false);
@@ -455,14 +452,8 @@
         private Panel pnlEdit;
         private Label label4;
         private Label label5;
-        private Button btnAddVertex;
-        private NumericUpDown numAddVertex;
-        private Button btnRemoveVertex;
-        private NumericUpDown numRemoveVertex;
         private Button btnFinishEditing;
         private PictureBox pbGraph;
-        private NumericUpDown numStartNode;
-        private NumericUpDown numEndNode;
         private Button btnFindPath;
         private Label lblPathMessage;
         private Panel pnlPathSearch;
@@ -470,5 +461,11 @@
         private Label label6;
         private Label label7;
         private Button btnClearMatrix_Click;
+        private TextBox txtStartNode;
+        private TextBox txtEndNode;
+        private TextBox txtAddVertex;
+        private TextBox txtRemoveVertex;
+        private Button btnRemoveVertex;
+        private Button btnAddVertex;
     }
 }

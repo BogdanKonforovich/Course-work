@@ -15,19 +15,15 @@ namespace Курсова_робота
         public Form1()
         {
             InitializeComponent();
-            // Підключаємо подію зміни розміру, щоб прибрати "білі плями" при розтягуванні вікна
             this.gridMatrix.SizeChanged += gridMatrix_SizeChanged;
 
-            // Ховаємо всі елементи керування розрахунком та редагуванням при старті
             lblAlgorithm.Visible = false;
             cmbAlgorithm.Visible = false;
             btnCalculate.Visible = false;
 
-            // Ховаємо кнопки режимів
             btnEditMode.Visible = false;
             btnFinishEditing.Visible = false;
 
-            // Ховаємо панелі і накладаємо їх одна на одну
             pnlEdit.Visible = false;
             pnlResults.Visible = false;
             pnlEdit.Location = pnlResults.Location;
@@ -66,13 +62,11 @@ namespace Курсова_робота
                     cmbAlgorithm.Visible = true;
                     btnCalculate.Visible = true;
 
-                    numAddVertex.Minimum = 1;
-                    numAddVertex.Maximum = n + 1;
-                    numAddVertex.Value = n + 1;
+                    txtAddVertex.Text = (n + 1).ToString();
+                    txtAddVertex.Tag = (n + 1).ToString();
 
-                    numRemoveVertex.Minimum = 1;
-                    numRemoveVertex.Maximum = n;
-                    numRemoveVertex.Value = n;
+                    txtRemoveVertex.Text = n.ToString();
+                    txtRemoveVertex.Tag = n.ToString();
 
                     pnlEdit.Visible = false;
                     pnlResults.Visible = true;
@@ -336,8 +330,6 @@ namespace Курсова_робота
                                     int n = graph.NumVertices;
                                     SetupResultGrid(n);
 
-                                    SetupResultGrid(n);
-
                                     for (int i = 0; i < n; i++)
                                     {
                                         for (int j = 0; j < n; j++)
@@ -375,15 +367,9 @@ namespace Курсова_робота
 
                                     pnlPathSearch.Visible = true;
 
-                                    numStartNode.Minimum = 1;
-                                    numStartNode.Maximum = n;
-                                    if (numStartNode.Value < 1) numStartNode.Value = 1;
+                                    txtStartNode.Text = "1";
+                                    txtEndNode.Text = n.ToString();
 
-                                    numEndNode.Minimum = 1;
-                                    numEndNode.Maximum = n;
-                                    if (numEndNode.Value < 1) numEndNode.Value = n;
-
-                                    pnlPathSearch.Visible = true;
                                     lblPathMessage.Text = "Оберіть вершини та натисніть 'Знайти шлях'";
 
                                     MessageBox.Show($"Матрицю найкоротших шляхів побудовано!\nКількість ітерацій: {result.Operations}", "Успіх");
@@ -490,115 +476,129 @@ namespace Курсова_робота
 
                 for (int i = 0; i < n; i++)
                 {
-                    gridResult.Rows[i].Height = rowHeight + (i < remainder ? 1 : 0);
+                    if (i < remainder)
+                    {
+                        gridResult.Rows[i].Height = rowHeight + 1;
+                    }
+                    else
+                    {
+                        gridResult.Rows[i].Height = rowHeight;
+                    }
                 }
             }
         }
 
         private void btnAddVertex_Click(object sender, EventArgs e)
         {
-            if (int.TryParse(txtVertices.Text, out int n))
+            int n = gridMatrix.RowCount;
+
+            if (n >= Const.MAX_VERTICES)
             {
-                if (n < Const.MAX_VERTICES)
+                MessageBox.Show($"Досягнуто ліміт вершин ({Const.MAX_VERTICES})!", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtAddVertex.Text))
+            {
+                MessageBox.Show("Поле позиції не може бути порожнім!", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtAddVertex.Text = (n + 1).ToString(); // Повертаємо дефолтне значення
+                return;
+            }
+
+            if (int.TryParse(txtAddVertex.Text, out int targetVertex))
+            {
+                int insertIndex = targetVertex - 1;
+
+                myGraph.AddVertex(insertIndex);
+                ClearResults();
+
+                n++;
+                txtVertices.Text = n.ToString();
+
+                DataGridViewTextBoxColumn newCol = new DataGridViewTextBoxColumn();
+                newCol.MinimumWidth = 35;
+                newCol.SortMode = DataGridViewColumnSortMode.NotSortable;
+                gridMatrix.Columns.Insert(insertIndex, newCol);
+                gridMatrix.Rows.Insert(insertIndex, 1);
+
+                for (int i = 0; i < n; i++)
                 {
-                    int targetVertex = (int)numAddVertex.Value;
+                    gridMatrix.Columns[i].HeaderText = (i + 1).ToString();
+                    gridMatrix.Rows[i].HeaderCell.Value = (i + 1).ToString();
 
-                    if (targetVertex >= 1 && targetVertex <= n + 1)
+                    if (i == insertIndex)
                     {
-                        int insertIndex = targetVertex - 1;
+                        gridMatrix.Rows[insertIndex].Cells[insertIndex].Value = "0";
+                        gridMatrix.Rows[insertIndex].Cells[insertIndex].ReadOnly = true;
+                        gridMatrix.Rows[insertIndex].Cells[insertIndex].Style.BackColor = Color.LightGray;
+                    }
+                    else
+                    {
+                        gridMatrix.Rows[insertIndex].Cells[i].Value = "-";
+                        gridMatrix.Rows[insertIndex].Cells[i].Style.ForeColor = Color.Black;
 
-                        myGraph.AddVertex(insertIndex);
-                        ClearResults();
-
-                        n++;
-                        txtVertices.Text = n.ToString();
-
-                        DataGridViewTextBoxColumn newCol = new DataGridViewTextBoxColumn();
-                        newCol.MinimumWidth = 35;
-                        newCol.SortMode = DataGridViewColumnSortMode.NotSortable;
-                        gridMatrix.Columns.Insert(insertIndex, newCol);
-                        gridMatrix.Rows.Insert(insertIndex, 1);
-
-                        for (int i = 0; i < n; i++)
-                        {
-                            gridMatrix.Columns[i].HeaderText = (i + 1).ToString();
-                            gridMatrix.Rows[i].HeaderCell.Value = (i + 1).ToString();
-
-                            if (i == insertIndex)
-                            {
-                                gridMatrix.Rows[insertIndex].Cells[insertIndex].Value = "0";
-                                gridMatrix.Rows[insertIndex].Cells[insertIndex].ReadOnly = true;
-                                gridMatrix.Rows[insertIndex].Cells[insertIndex].Style.BackColor = Color.LightGray;
-                            }
-                            else
-                            {
-                                gridMatrix.Rows[insertIndex].Cells[i].Value = "-";
-                                gridMatrix.Rows[insertIndex].Cells[i].Style.ForeColor = Color.Black;
-
-                                gridMatrix.Rows[i].Cells[insertIndex].Value = "-";
-                                gridMatrix.Rows[i].Cells[insertIndex].Style.ForeColor = Color.Black;
-                            }
-                        }
-
-                        UpdateRowHeights();
-                        gridMatrix.ClearSelection();
-
-                        numAddVertex.Maximum = n + 1;
-                        numRemoveVertex.Maximum = n;
-
-                        pbGraph.Invalidate();
+                        gridMatrix.Rows[i].Cells[insertIndex].Value = "-";
+                        gridMatrix.Rows[i].Cells[insertIndex].Style.ForeColor = Color.Black;
                     }
                 }
-                else
-                {
-                    MessageBox.Show($"Досягнуто ліміт вершин!", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+
+                UpdateRowHeights();
+                gridMatrix.ClearSelection();
+
+                txtAddVertex.Text = (n + 1).ToString();
+                txtAddVertex.Tag = (n + 1).ToString();
+                txtRemoveVertex.Text = n.ToString();
+                txtRemoveVertex.Tag = n.ToString();
+
+                pbGraph.Invalidate();
             }
         }
 
         private void btnRemoveVertex_Click(object sender, EventArgs e)
         {
-            if (int.TryParse(txtVertices.Text, out int n))
+            int n = gridMatrix.RowCount;
+
+            if (n <= Const.MIN_VERTICES)
             {
-                if (n > Const.MIN_VERTICES)
+                MessageBox.Show($"Досягнуто мінімальної кількості вершин ({Const.MIN_VERTICES})!", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtRemoveVertex.Text))
+            {
+                MessageBox.Show("Поле видалення не може бути порожнім!", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtRemoveVertex.Text = n.ToString();
+                return;
+            }
+
+            if (int.TryParse(txtRemoveVertex.Text, out int targetVertex))
+            {
+                int removeIndex = targetVertex - 1;
+
+                myGraph.RemoveVertex(removeIndex);
+                ClearResults();
+
+                gridMatrix.Columns.RemoveAt(removeIndex);
+                gridMatrix.Rows.RemoveAt(removeIndex);
+
+                n--;
+                txtVertices.Text = n.ToString();
+
+                for (int i = 0; i < n; i++)
                 {
-                    int targetVertex = (int)numRemoveVertex.Value;
-
-                    if (targetVertex >= 1 && targetVertex <= n)
-                    {
-                        int removeIndex = targetVertex - 1;
-
-                        myGraph.RemoveVertex(removeIndex);
-                        ClearResults();
-
-                        gridMatrix.Columns.RemoveAt(removeIndex);
-                        gridMatrix.Rows.RemoveAt(removeIndex);
-
-                        n--;
-                        txtVertices.Text = n.ToString();
-
-                        for (int i = 0; i < n; i++)
-                        {
-                            gridMatrix.Columns[i].HeaderText = (i + 1).ToString();
-                            gridMatrix.Rows[i].HeaderCell.Value = (i + 1).ToString();
-                        }
-
-                        UpdateRowHeights();
-                        gridMatrix.ClearSelection();
-
-                        if (numAddVertex.Value > n + 1) numAddVertex.Value = n + 1;
-                        numAddVertex.Maximum = n + 1;
-
-                        if (numRemoveVertex.Value > n) numRemoveVertex.Value = n;
-                        numRemoveVertex.Maximum = n;
-
-                        pbGraph.Invalidate();
-                    }
+                    gridMatrix.Columns[i].HeaderText = (i + 1).ToString();
+                    gridMatrix.Rows[i].HeaderCell.Value = (i + 1).ToString();
                 }
-                else
-                {
-                    MessageBox.Show($"Досягнуто мінімальної кількісті вершин!", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+
+                UpdateRowHeights();
+                gridMatrix.ClearSelection();
+
+                txtAddVertex.Text = (n + 1).ToString();
+                txtAddVertex.Tag = (n + 1).ToString();
+                txtRemoveVertex.Text = n.ToString();
+                txtRemoveVertex.Tag = n.ToString();
+
+                pbGraph.Invalidate();
             }
         }
 
@@ -632,59 +632,59 @@ namespace Курсова_робота
         private void btnFindPath_Click(object sender, EventArgs e)
         {
             int n = gridMatrix.RowCount;
+
+            if (string.IsNullOrWhiteSpace(txtStartNode.Text) || string.IsNullOrWhiteSpace(txtEndNode.Text))
+            {
+                MessageBox.Show("Поля не можуть бути порожніми! Введіть номери вершин.", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!int.TryParse(txtStartNode.Text, out int startNodeVal) || !int.TryParse(txtEndNode.Text, out int endNodeVal))
+                return;
+
             if (n > 0 && nextMatrix != null)
             {
-                int start = (int)numStartNode.Value - 1;
-                int end = (int)numEndNode.Value - 1;
+                int start = startNodeVal - 1;
+                int end = endNodeVal - 1;
 
-                if (start >= 0 && end >= 0 && start < n && end < n)
+                if (nextMatrix.GetLength(0) != n)
                 {
-                    if (nextMatrix.GetLength(0) != n)
-                    {
-                        MessageBox.Show("Поточний алгоритм не підтримує відновлення шляху.", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
-                    }
-
-                    highlightedEdges = new bool[n, n];
-
-                    string dVal = gridResult.Rows[start].Cells[end].Value?.ToString();
-
-                    if (dVal == "-" || string.IsNullOrEmpty(dVal))
-                    {
-                        lblPathMessage.Text = $"Шляху між {start + 1} та {end + 1} не існує.";
-                    }
-                    else if (start == end)
-                    {
-                        lblPathMessage.Text = "Ви вже у цій вершині. Відстань: 0.";
-                    }
-                    else
-                    {
-                        int curr = start;
-                        string pathStr = (start + 1).ToString();
-                        int safetyLimit = 0;
-
-                        while (curr != end && safetyLimit < n)
-                        {
-                            int next = nextMatrix[curr, end];
-
-                            if (next != -1)
-                            {
-                                highlightedEdges[curr, next] = true;
-                                curr = next;
-                                pathStr += " -> " + (curr + 1).ToString();
-                            }
-                            else
-                            {
-                                safetyLimit = n;
-                            }
-                            safetyLimit++;
-                        }
-
-                        lblPathMessage.Text = $"Знайдений шлях: {pathStr} (Довжина: {dVal})";
-                    }
-
-                    pbGraph.Invalidate();
+                    MessageBox.Show("Поточний алгоритм не підтримує відновлення шляху.", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
                 }
+
+                highlightedEdges = new bool[n, n];
+                string dVal = gridResult.Rows[start].Cells[end].Value?.ToString();
+
+                if (dVal == "-" || string.IsNullOrEmpty(dVal))
+                {
+                    lblPathMessage.Text = $"Шляху між {start + 1} та {end + 1} не існує.";
+                }
+                else if (start == end)
+                {
+                    lblPathMessage.Text = "Ви вже у цій вершині. Відстань: 0.";
+                }
+                else
+                {
+                    int curr = start;
+                    string pathStr = (start + 1).ToString();
+                    int safetyLimit = 0;
+
+                    while (curr != end && safetyLimit < n)
+                    {
+                        int next = nextMatrix[curr, end];
+                        if (next != -1)
+                        {
+                            highlightedEdges[curr, next] = true;
+                            curr = next;
+                            pathStr += " -> " + (curr + 1).ToString();
+                        }
+                        else { safetyLimit = n; }
+                        safetyLimit++;
+                    }
+                    lblPathMessage.Text = $"Знайдений шлях: {pathStr} (Довжина: {dVal})";
+                }
+                pbGraph.Invalidate();
             }
             else
             {
@@ -696,7 +696,18 @@ namespace Курсова_робота
         {
             if (myGraph != null && lastResult != null)
             {
-                FileService.SaveResultsToFile(myGraph, lastResult);
+                string selectedAlg;
+
+                if (cmbAlgorithm.SelectedItem != null)
+                {
+                    selectedAlg = cmbAlgorithm.SelectedItem.ToString();
+                }
+                else
+                {
+                    selectedAlg = "Невідомий алгоритм";
+                }
+
+                FileService.SaveResultsToFile(myGraph, lastResult, selectedAlg);
             }
             else
             {
@@ -862,7 +873,7 @@ namespace Курсова_робота
             {
                 for (int j = 0; j < n; j++)
                 {
-                    if (i != j) 
+                    if (i != j)
                     {
                         string valStr = gridMatrix.Rows[i].Cells[j].Value?.ToString()?.Trim();
                         if (!string.IsNullOrEmpty(valStr) && valStr != "-")
@@ -873,6 +884,110 @@ namespace Курсова_робота
                 }
             }
             return false;
+        }
+
+        private void txtAddVertex_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txt = sender as TextBox;
+            if (string.IsNullOrWhiteSpace(txt.Text)) return;
+
+            int n = gridMatrix.RowCount;
+            if (n == 0) return;
+
+            if (!int.TryParse(txt.Text, out int val))
+            {
+                MessageBox.Show("Введіть коректне ціле число! Літери заборонені.", "Помилка формату", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (txt.Tag != null) txt.Text = txt.Tag.ToString();
+                else txt.Text = (n + 1).ToString();
+                txt.SelectionStart = txt.Text.Length;
+                return;
+            }
+
+            if (val < 1 || val > n + 1)
+            {
+                MessageBox.Show($"Позиція має бути від 1 до {n + 1}!", "Помилка лімітів", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (txt.Tag != null) txt.Text = txt.Tag.ToString();
+                else txt.Text = (n + 1).ToString();
+                txt.SelectionStart = txt.Text.Length;
+                return;
+            }
+
+            txt.Tag = txt.Text;
+        }
+
+        private void txtRemoveVertex_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txt = sender as TextBox;
+            if (string.IsNullOrWhiteSpace(txt.Text)) return;
+
+            int n = gridMatrix.RowCount;
+            if (n == 0) return;
+
+            if (!int.TryParse(txt.Text, out int val))
+            {
+                MessageBox.Show("Введіть коректне ціле число! Літери заборонені.", "Помилка формату", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (txt.Tag != null) txt.Text = txt.Tag.ToString();
+                else txt.Text = n.ToString();
+                txt.SelectionStart = txt.Text.Length;
+                return;
+            }
+
+            if (val < 1 || val > n)
+            {
+                MessageBox.Show($"Вершини з таким номером не існує! Введіть від 1 до {n}.", "Помилка лімітів", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (txt.Tag != null) txt.Text = txt.Tag.ToString();
+                else txt.Text = n.ToString();
+                txt.SelectionStart = txt.Text.Length;
+                return;
+            }
+
+            txt.Tag = txt.Text;
+        }
+
+        private void txtNode_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txt = sender as TextBox;
+
+            if (string.IsNullOrWhiteSpace(txt.Text)) 
+                return;
+
+            int n = gridMatrix.RowCount;
+
+            if (!int.TryParse(txt.Text, out int val))
+            {
+                MessageBox.Show("Введіть коректні цілі числа! Літери та символи заборонені.", "Помилка формату", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                if (txt.Tag != null)
+                {
+                    txt.Text = txt.Tag.ToString();
+                }
+                else
+                {
+                    txt.Text = "1";
+                }
+
+                txt.SelectionStart = txt.Text.Length;
+                return;
+            }
+
+            if (val < 1 || val > n)
+            {
+                MessageBox.Show($"Вершини з таким номером не існує! Будь ласка, введіть число від 1 до {n}.", "Помилка лімітів", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                if (txt.Tag != null)
+                {
+                    txt.Text = txt.Tag.ToString();
+                }
+                else
+                {
+                    txt.Text = "1";
+                }
+
+                txt.SelectionStart = txt.Text.Length;
+                return;
+            }
+
+            txt.Tag = txt.Text;
         }
 
         private void label6_Click(object sender, EventArgs e) { }
@@ -892,5 +1007,11 @@ namespace Курсова_робота
         private void label7_Click(object sender, EventArgs e) { }
 
         private void cmbAlgorithm_SelectedIndexChanged(object sender, EventArgs e) { }
+
+        private void numStartNode_ValueChanged(object sender, EventArgs e) { }
+
+        private void textBox1_TextChanged(object sender, EventArgs e) { }
+
+        private void pnlPathSearch_Paint(object sender, PaintEventArgs e) { }
     }
 }
