@@ -15,7 +15,7 @@ namespace Coursework_2
             long operations = 0;
 
             int[,] dist = (int[,])matrix.Clone();
-            int[,] next = (int[,])dist.Clone();
+            int[,] next = new int[n, n];
 
             for (int i = 0; i < n; i++)
             {
