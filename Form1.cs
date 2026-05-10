@@ -501,7 +501,7 @@ namespace Курсова_робота
             if (string.IsNullOrWhiteSpace(txtAddVertex.Text))
             {
                 MessageBox.Show("Поле позиції не може бути порожнім!", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtAddVertex.Text = (n + 1).ToString(); // Повертаємо дефолтне значення
+                txtAddVertex.Text = (n + 1).ToString();
                 return;
             }
 
