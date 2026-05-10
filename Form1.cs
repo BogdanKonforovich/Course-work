@@ -109,6 +109,8 @@ namespace Курсова_робота
 
                 gridMatrix.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
 
+                gridMatrix.Columns[i].FillWeight = 100;
+
                 gridMatrix.Columns[i].HeaderText = (i + 1).ToString();
                 gridMatrix.Rows[i].HeaderCell.Value = (i + 1).ToString();
             }
@@ -524,6 +526,7 @@ namespace Курсова_робота
                 for (int i = 0; i < n; i++)
                 {
                     gridMatrix.Columns[i].HeaderText = (i + 1).ToString();
+                    gridMatrix.Columns[i].FillWeight = 100;
                     gridMatrix.Rows[i].HeaderCell.Value = (i + 1).ToString();
 
                     if (i == insertIndex)
@@ -587,6 +590,7 @@ namespace Курсова_робота
                 for (int i = 0; i < n; i++)
                 {
                     gridMatrix.Columns[i].HeaderText = (i + 1).ToString();
+                    gridMatrix.Columns[i].FillWeight = 100;
                     gridMatrix.Rows[i].HeaderCell.Value = (i + 1).ToString();
                 }
 
